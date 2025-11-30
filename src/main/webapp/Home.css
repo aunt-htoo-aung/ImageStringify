@@ -1,0 +1,131 @@
+body {
+background-color: #ffffff;
+background-image: radial-gradient(circle, rgba(96, 96, 96, 1) 1px, transparent 1px);
+background-size: 81px 81px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 40px;
+    color: black;
+    gap: 0px; 
+    margin: 0; 
+    padding: 0;
+}
+
+.logo span {
+    font-weight: bold;
+    margin-left: 10px; 
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 20px;
+}
+
+.logo:hover {
+    cursor: pointer;
+    color: hotpink;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 10px;
+    border: 2px solid transparent; 
+    background-color: white;
+    border-radius: 10px;
+      position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.btn{
+    border: 1px solid black;
+    border-radius: 20px;
+    padding: 10px 20px;
+    background-color: transparent;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 15px;
+}
+.btn:hover {
+    color: white;
+    background-color: black;
+}
+
+.nav-link ul{
+    list-style: none;
+    display: flex;
+    gap: 100px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-link ul li a{
+    text-decoration: none;
+    color: black;
+    display: block;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.hero {
+    padding: 50px;
+    width: 93%;
+    background-color: white;
+    margin-right: 100px;
+}
+
+.hero-text {
+    text-align: center;
+    margin-bottom: 50px; 
+}
+
+.hero-text h1 {
+    margin-bottom: 20px;
+    font-size: 3rem;
+    color: #111;
+    line-height: 1.2;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    
+}
+.hero-text p {
+    font-size: 1.2rem;
+    margin-bottom: 0;
+}
+
+
+.hero-content {
+    display: flex;
+    align-items: flex-start; 
+    justify-content: flex-start;
+    gap: 30px; 
+}
+
+.upload-box {
+    border: 2px dashed rgb(52, 51, 51);
+    cursor: pointer;
+    text-align: left;
+    border-radius: 30px;
+    padding: 40px;
+    background-color: #f9f9f9;   
+    width: 400px;
+    margin-top: 150px;
+    margin-left: 120px;
+}
+
+.robot-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.robot-container img {
+    width: 500px;
+    height: auto;
+    margin-top: 50px;
+    
+}
