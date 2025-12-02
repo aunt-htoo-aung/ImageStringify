@@ -5,16 +5,19 @@ import java.util.Base64;
 
 import javax.servlet.http.Part;
 
+import com.coderbros.imagestringify.exception.InvalidImageTypeException;
+import com.coderbros.imagestringify.exception.LargeFileSizeException;
+
 public class ConvertService {
 	private final long twoMbInBytes = 2 * 1024 * 1024;
 
 	public String convert(Part part) throws Exception {
 		String mimeType = part.getContentType();
 		if (mimeType == null || !mimeType.startsWith("image/")) {
-			throw new IllegalArgumentException("Invalid image type");
+			throw new InvalidImageTypeException("Invalid image type");
 		}
 		if (part.getSize() > twoMbInBytes) {
-			throw new IllegalArgumentException("File is larger than 2 MB");
+			throw new LargeFileSizeException("File is larger than 2 MB");
 		}
 		InputStream is = part.getInputStream();
 		byte[] imgBytes = is.readAllBytes();
