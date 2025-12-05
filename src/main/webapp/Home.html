@@ -5,54 +5,164 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Home.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
-
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <title>ImageStringify</title>
 </head>
+
 <body>
-    <!--navigation-->
+
+    <!-- Navigation -->
     <header class="navbar">
         <div class="logo">
             <i class="fa-brands fa-angrycreative"></i>
-           <span class="text">ImageStringify</span>
+            <span class="text">ImageStringify</span>
         </div>
 
-     <!-- Navigation-->
         <nav class="nav-link">
             <ul>
                 <li><a href="index.html">Features</a></li>
-                <li><a href="upload.html">Covnert</a></li>
-                <li><a href="about.html">About</a></li>
+                <li><a href="upload.html">Service +</a></li>
+                <li><a href="about.html">Convert</a></li>
             </ul>
         </nav>
+
         <button class="btn">SignUp</button>
     </header>
 
-  <section class="hero">
-    <div class="hero-text">
-        <h1>Convert Your Images to Text Art!</h1>
-        <p>Transform your images into stunning text art with ImageStringify.
-            <br> Upload your image in seconds.</p>
-    </div>
+    <!--hero section-->
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Convert Your Images to Text Art!</h1>
+            <p>
+                Transform your images into stunning text art with ImageStringify.
+                <br> Upload your image in seconds.
+            </p>
+        </div>
 
-    <!-- Side by side content -->
-    <div class="hero-content">
-        <div class="upload-box">
-            <div class="upload-content">
-                <i class="fa-solid fa-upload"></i>
-                <p class="drop-text">Drag & Drop your image here</p>
-                <span class="browes-text">or click to browse. PNG, JPG, WebP, GIF supported</span>
+        <div class="hero-content">
+
+            <!--upload box-->
+            <div class="upload-box">
+                <label for="imageUpload" class="upload-content">
+                    <i class="fa-solid fa-upload"></i>
+                    <p class="drop-text">Drag & Drop your image here</p>
+                    <span class="browse-text">or click to browse. PNG, JPG, WebP, GIF supported</span>
+                </label>
+                <input type="file" id="imageUpload" hidden>
             </div>
-            <input type="file" id="imageUpload">
-        </div>
 
-        <div class="robot-container">
-            <img src="image/WhiteRobot.png" alt="Robot" />
+            <!--hidden-->
+            <div class="converter-box hidden" id="postUploadConverter">
+                <div class="image-previews">
+                    <div class="preview-card">
+                        <span class="format-tag">preview</span>
+                        <div class="image-placeholder"
+                            style="background-image: url('https://via.placeholder.com/150x150?text=Input');">
+                        </div>
+                    </div>
+
+                    <i class="fa-solid fa-arrow-right-long conversion-arrow"></i>
+
+                    <div class="preview-card">
+                        <span class="format-tag">Output</span>
+                        <div class="image-placeholder"
+                            style="background-image: url('https://via.placeholder.com/150x150?text=Output');">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls-panel">
+                    <div class="output-selector">
+                        <label for="outputFormat">Output Format</label>
+                        <select id="outputFormat" class="format-dropdown">
+                            <option value="txt">PNG</option>
+                            <option value="html">JPG</option>
+                            <option value="md">WebP</option>
+                        </select>
+                    </div>
+
+                    <div class="converter-actions">
+                        <button class="action-btn convert-btn">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Convert Image
+                        </button>
+
+                        <button class="action-btn download-btn">
+                            <i class="fa-solid fa-download"></i> Download
+                        </button>
+
+                        <button class="reset-btn">Reset</button>
+                    </div>
+                </div>
+
+                <div class="base64-output hidden" id="base64Output">
+                    <p>Base64 Output (Text)</p>
+                         <div class="base64-box">
+                                <p class="base64-text">Lee PL</p>
+                             <button class="copy-btn">Copy</button>
+                          </div>
+                     <span class="size-text">? KB</span>
+                 </div>  
+            </div>
+
+            <!--Robot Image-->
+            <div class="robot-container">
+                <img src="image/WhiteRobot.png" alt="Robot">
+            </div>
+
         </div>
-    </div>
 </section>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const imageUpload = document.getElementById('imageUpload');
+        const uploadBox = document.querySelector('.upload-box');
+        const converterBox = document.getElementById('postUploadConverter');
+        const inputImagePlaceholder = converterBox.querySelector('.preview-card:nth-child(1) .image-placeholder');
+        const outputImagePlaceholder = converterBox.querySelector('.preview-card:nth-child(2) .image-placeholder');
+        
+        const convertButton = converterBox.querySelector('.convert-btn');
+        const base64Output = document.getElementById('base64Output'); 
+
+        imageUpload.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const file = this.files[0];
+                
+                //Hide the  upload box
+                uploadBox.classList.add('hidden');
+                
+                    // Show the converter box
+                converterBox.classList.remove('hidden');
+
+             
+                if (base64Output) {
+                    base64Output.classList.add('hidden');
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+
+                    
+                     if (inputImagePlaceholder) {
+                        inputImagePlaceholder.style.backgroundImage = `url('${e.target.result}')`;
+                     }
+          
+                     if (outputImagePlaceholder) {
+                        outputImagePlaceholder.style.backgroundImage = 'none';
+                     }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+                // Add the event listener for Convert button
+        if (convertButton && base64Output) {
+            convertButton.addEventListener('click', () => {
+
+                // Show the Base64 Output section when convert is clicked
+                base64Output.classList.remove('hidden');        
+            });
+        }
+    });
+</script>
 </body>
 </html>
