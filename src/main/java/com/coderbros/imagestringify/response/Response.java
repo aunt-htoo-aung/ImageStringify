@@ -8,5 +8,7 @@ public class Response<T> {
 		this.message = message;
 		this.data = data;
 	}
-	
+	public Response(String message) {
+		this.message = message;
+	}
 }

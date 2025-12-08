@@ -22,14 +22,40 @@ public class ConvertServlet extends HttpServlet {
        
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
 
+        if ("imgToOther".equals(action)) {
+            handleImageToOther(request, response);
+        } else if ("base64ToImg".equals(action)) {
+            handleBytesToImage(request, response);
+        } else {
+        	HttpResponse.error(response, "Unknown action.");
+        }
 		response.setContentType("application/json");
-		Part filePart = request.getPart("img");
+	}
+
+
+	private void handleBytesToImage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String base64 = request.getParameter("base64");
+		String outputFormat = request.getParameter("outputFormat");
+		
 		try {
-			HttpResponse.success(response, "Successfully Converted.", new ConvertService().convert(filePart));
+			HttpResponse.success(response, "Successfully Converted.", new ConvertService().convert(base64,outputFormat));
 		} catch (Exception e) {
-			HttpResponse.error(response, e.getMessage(), null);
+			HttpResponse.error(response, e.getMessage());
 		}
 	}
 
+
+	private void handleImageToOther(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		
+		String outputFormat = request.getParameter("outputFormat");
+		Part filePart = request.getPart("img");
+		
+		try {
+			HttpResponse.success(response, "Successfully Converted.", new ConvertService().convert(filePart,outputFormat));
+		} catch (Exception e) {
+			HttpResponse.error(response, e.getMessage());
+		}
+	}
 }
