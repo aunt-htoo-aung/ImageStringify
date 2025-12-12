@@ -23,17 +23,19 @@ public class ConvertServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-
-        if ("imgToOther".equals(action)) {
+        response.setContentType("application/json");
+        if (action.equals("imgToOther")) {
             handleImageToOther(request, response);
-        } else if ("base64ToImg".equals(action)) {
+        } else if (action.equals("base64ToImg")) {
             handleBytesToImage(request, response);
         } else {
         	HttpResponse.error(response, "Unknown action.");
         }
-		response.setContentType("application/json");
 	}
 
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		HttpResponse.error(response, "Unknown action.");
+	}
 
 	private void handleBytesToImage(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String base64 = request.getParameter("base64");
