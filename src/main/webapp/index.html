@@ -10,99 +10,75 @@
 <body>
     <header class="Container">
         <div class="nav">
-
-            <!-- Logo -->
             <div class="logo">
                 <i class=""></i>
                    <span class="nav-span">ImageStringify</span>
              </div>
-
-
-            <!--Navigation-->
              <nav>
                 <ul class="nav-links">
-                    <li><a href="index.html">Home</a></li> 
-                      <li><a>Tutorial</a></li>
-                        <li> <a>Service</a></li>
-                     <li> <a>FAQ</a></li>
-                    <li> <a>Contact</a></li>  
+                    <li><a href="index.html"><i class="fa-solid fa-house"></i> Home</a></li> 
+                    <li><a><i class="fa-solid fa-book-open"></i> Tutorial</a></li>
+                    <li><a><i class="fa-solid fa-briefcase"></i> Service</a></li>
+                    <li><a><i class="fa-solid fa-circle-question"></i> FAQ</a></li>
+                    <li><a><i class="fa-solid fa-envelope"></i> Contact</a></li>  
                 </ul>
              </nav>
-
-
-             <!-- Right Icon -->
             <div class="nav-right">
                 <i class="theme-icon fa-solid fa-moon"></i>
             </div>
     </header>
-
     <section class="hero-container">
         <div class="hero-content">
-            <h2>Convert your image to base 64</h2>
+            <h2>Convert your images to base 64</h2>
             <p>Transform your images into base64-encoded strings instantly.<br>     
                        Perfect for HTML, CSS, and email templates.</p>
         </div>
-
         <div class="content-container">
-            <!--Left Side-->
-        <div class="image">
+            <div class="image">
             <img src="image/Bro.png" alt="Image to Base64">
         </div>
-
-       
-        <!--Right Side-->
-    <div class="upload-container" id="dropzone">
-    <input type="file" id="fileInput" accept="image/*">
-
-    <div id="idle-state" class="upload-box">
-        <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
-        <h3>Drag & Drop your images here</h3>
-        <p>or click browse your files</p>
-    </div>
-
-    <div id="loading-state" class="upload-box" style="display: none;">
-        <i class="fa-solid fa-circle-notch fa-spin upload-icon"></i>
-        <h3>Uploading file...</h3>
-    </div>
-
-    <div id="file-list-container" style="display: none;">
-        <div class="file-item">
-            <div class="file-info">
-                <i class="fa-solid fa-file-zipper zip-icon"></i>
-                <div>
-                    <strong id="file-name">File Name.jpg</strong>
-                    <p id="file-size">0 KB</p>
+        <div class="upload-container" id="dropzone">
+            <input type="file" id="fileInput" accept="image/*">
+            <div id="idle-state" class="upload-box">
+                <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                <h3>Drag & Drop your images here</h3>
+                <p>or click browse your files</p>
+            </div>
+            <div id="loading-state" class="upload-box" style="display: none;">
+                <i class="fa-solid fa-circle-notch fa-spin upload-icon"></i>
+                <h3>Uploading file...</h3>
+            </div>
+            <div id="file-list-container" style="display: none;">
+                <div class="file-item">
+                    <div class="file-info">
+                        <i class="fa-solid fa-file-zipper zip-icon"></i>
+                        <div>
+                            <strong id="file-name">File Name.jpg</strong>
+                            <p id="file-size">0 KB</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-trash-can delete-icon" id="remove-file"></i>
                 </div>
             </div>
-            <i class="fa-solid fa-trash-can delete-icon" id="remove-file"></i>
+            <div class="file-type" id="file-type-tags">
+                <span>jpg</span><span>PNG</span><span>SVG</span><span>GIF</span>
+            </div>
+            <small id="upload-limit-text">Maximum size: 30MB</small>
+            <div class="upload-controls">
+                <button class="btn btn-cancel" id="cancel-btn">Cancel</button>
+                <button class="btn btn-next" id="next-btn" disabled>Next</button>
+            </div>
         </div>
-    </div>
-
-    <div class="file-type" id="file-type-tags">
-        <span>jpg</span><span>PNG</span><span>SVG</span><span>GIF</span>
-    </div>
-
-    <small id="upload-limit-text">Maximum size: 30MB</small>
-
-    <div class="upload-controls">
-        <button class="btn btn-cancel" id="cancel-btn">Cancel</button>
-        <button class="btn btn-next" id="next-btn" disabled>Next</button>
-    </div>
-</div>
-
     </section>
-
     <div class="results-container" id="results-box" style="display: none;">
     <div class="results-header">
         <h3><i class="fa-solid fa-file-code"></i> Encoding Results</h3>
     </div>
-
     <div class="tabs-nav">
         <button class="tab-btn active" data-tab="base64-tab">Base64 Code</button>
         <button class="tab-btn" data-tab="format-tab">Image Format</button>
         <button class="tab-btn" data-tab="decode-tab">Base64 to Image</button>
     </div>
-
     <div id="base64-tab" class="tab-content active">
         <div class="file-summary">
             <img id="preview-mini" src="" alt="Preview">
@@ -111,7 +87,6 @@
                 <p id="res-meta">PNG | 0 KB | 0x0</p>
             </div>
         </div>
-        
         <div class="code-section">
             <div class="code-header">
                 <span>For use in &lt;img&gt; elements:</span>
@@ -119,21 +94,45 @@
             </div>
             <textarea id="base64-output" readonly></textarea>
         </div>
-    </div>
 
-    <div id="format-tab" class="tab-content">
-        <div class="converter-box">
-            <h4>Convert Image Format</h4>
-            <div class="format-options">
-                <label><input type="radio" name="img-format" value="image/png" checked> PNG</label>
-                <label><input type="radio" name="img-format" value="image/jpeg"> JPG</label>
-                <label><input type="radio" name="img-format" value="image/webp"> WEBP</label>
-            </div>
-            <button class="btn-next active" id="download-btn" style="margin-top: 20px;">
-                <i class="fa-solid fa-download"></i> Download Image
+    </div>
+  <div id="format-tab" class="tab-content">
+    <div class="converter-box">
+        <h4><i class="fa-solid fa-shuffle"></i> Convert Image Format</h4>
+        
+        <div class="conversion-controls-wrapper">
+            <label for="format-select">Choose Output Format:</label>
+            <select id="format-select" class="format-select">
+                <option value="image/png">PNG</option>
+                <option value="image/jpeg">JPG</option>
+                <option value="image/gif">GIF</option>
+                <option value="image/webp">WEBP</option>
+            </select>
+            
+            <button class="btn btn-next active convert-btn" id="convert-format-btn">
+                <i class="fa-solid fa-redo"></i> Convert
             </button>
         </div>
+
+        <div id="conversion-output-section" class="conversion-output-section" style="display: none;">
+            <div class="output-header">
+                <p class="conversion-status">Conversion Complete!</p>
+            </div>
+            
+            <div class="output-preview-box">
+                <p>Converted Image Preview:</p>
+                <div class="output-preview-image">
+                    <img id="converted-image-preview" src="" alt="Converted Output" class="preview-img">
+                </div>
+            </div>
+
+            <button class="btn btn-next active download-btn" id="download-btn">
+                <i class="fa-solid fa-download"></i> Download Converted Image
+            </button>
+        </div>
+        
     </div>
+</div>
 
     <div id="decode-tab" class="tab-content">
         <div class="decoder-box">
@@ -145,11 +144,124 @@
             </div>
         </div>
     </div>
-    
     <button class="btn-cancel" id="back-to-upload" style="margin-top: 20px;">Convert more images</button>
 </div>
+    <section class="options-container">
+        <div class="options-wrapper">
+            <div class="format-support">
+                <h3>Supported file formats</h3>
+                <p>Upload up to **20 images simultaneously** (max. **1 MB each**) in the most popular web formats: **JPG, PNG, GIF, WebP, SVG, or BMP.**</p>
+                <p>Our converter handles everything from photos and graphics to icons and logos. Simply drag and drop your files or click to browse - the conversion happens instantly in your browser.</p>
+            </div>
+            <div class="optimization-option">
+                <h3>Image optimization option</h3>
+                <p>Enable smart compression for your **JPEG & PNG** images to dramatically reduce file sizes without sacrificing visual quality. Perfect for faster page loads and reduced bandwidth usage.</p>
+                <div class="toggle-switch-container">
+                    <label class="switch">
+                        <input type="checkbox" id="optimizationToggle">
+                        <span class="slider round"></span>
+                    </label>
+                    <i class="fa-solid fa-bolt optimization-icon"></i>
+                </div>
+            </div>
+        </div>
+    </section>
 
 
-<script src="index.js"></script>
+    <div class="section-divider"></div>
+
+
+    <section class="features-container">
+        <div class="features-wrapper">
+            <h2>Why use Base64 Image Encoding?</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon-header">
+                        <i class="fa-solid fa-bolt feature-icon" style="color: #ffc400;"></i>
+                        <h3>Reduce HTTP Requests</h3>
+                    </div>
+                    <p>By embedding images directly into your HTML or CSS as base64 strings, you eliminate separate HTTP requests for image files. This can significantly improve page load times, especially for sites with many small images like icons or logos.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-header">
+                        <i class="fa-solid fa-shield-halved feature-icon" style="color: #00b894;"></i>
+                        <h3>Simplified Deployment</h3>
+                    </div>
+                    <p>Base64 encoded images travel with your code, eliminating the need to manage separate image files and directories. This makes deployment simpler and reduces the risk of missing or broken image links in your application.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-header">
+                        <i class="fa-solid fa-envelope-open-text feature-icon" style="color: #fdcb6e;"></i>
+                        <h3>Perfect for Email Templates</h3>
+                    </div>
+                    <p>Email clients often block external images by default. Base64 encoded images are embedded directly in your email HTML, ensuring your images display immediately without requiring user permission or external server access.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-header">
+                        <i class="fa-solid fa-database feature-icon" style="color: #a29bfe;"></i>
+                        <h3>Data URIs Support</h3>
+                    </div>
+                    <p>All modern browsers support data URIs with base64 encoded images. Use them in `img` src attributes, CSS backgrounds, or even as favicon sources. They work seamlessly across different web technologies and frameworks.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-header">
+                        <i class="fa-solid fa-server feature-icon" style="color: #ff7675;"></i>
+                        <h3>Improved Caching</h3>
+                    </div>
+                    <p>When images are embedded in your CSS or JavaScript files, they benefit from the same caching strategy as your code. This means fewer cache invalidation issues and more predictable performance across page visits.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-header">
+                        <i class="fa-solid fa-triangle-exclamation feature-icon" style="color: #e17055;"></i>
+                        <h3>No External Dependencies</h3>
+                    </div>
+                    <p>Your images remain accessible even if CDN services are down or blocked. Base64 encoding ensures complete self-containment of your web application, improving reliability and reducing dependencies on external resources.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                
+                <div class="footer-col footer-info">
+                    <h3>Base64 Image</h3>
+                    <p>Free online image to base64 converter</p>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#"><i class="fa-solid fa-house"></i> Home</a></li>
+                        <li><a href="#"><i class="fa-solid fa-book-open"></i> Tutorial</a></li>
+                        <li><a href="#"><i class="fa-solid fa-circle-question"></i> FAQ</a></li>
+                        <li><a href="#"><i class="fa-solid fa-heart"></i> Donation</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#"><i class="fa-solid fa-shield-halved"></i> Privacy Policy</a></li>
+                        <li><a href="#"> <i class="fa-solid fa-file-invoice"></i> Terms of Use</a></li>
+                        <li><a href="#"><i class="fa-solid fa-building"></i> Imprint</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-about">
+                <h4>About</h4>
+                <p>Convert images to base64 encoding for use in HTML, CSS, and email templates. Fast, free, and secure image conversion.</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Geek Cell GmbH. All rights reserved.</p>
+            <p>By using this site you accept the <a href="#" class="terms-link">terms of use</a>.</p>
+        </div>
+    </footer>
+    <script src="index.js"></script>
 </body>
 </html>

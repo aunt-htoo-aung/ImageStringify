@@ -16,26 +16,55 @@ const previewMini = document.getElementById('preview-mini');
 const tabButtons = document.querySelectorAll('.tab-btn');
 const tabContents = document.querySelectorAll('.tab-content');
 
-let currentFileData = null;
+const formatSelect = document.getElementById('format-select');
+const convertFormatBtn = document.getElementById('convert-format-btn');
+const conversionOutputSection = document.getElementById('conversion-output-section');
+const convertedImagePreview = document.getElementById('converted-image-preview');
+const downloadBtn = document.getElementById('download-btn'); 
 
-//base64 output //
+let currentFileData = null;
+let currentFileName = null; 
+
+
+
+function simulateConversionSuccess() {
+    const format = formatSelect.value;
+    const extension = format.split('/')[1].toUpperCase();
+
+    convertedImagePreview.src = currentFileData;
+    convertedImagePreview.style.display = 'block';
+    
+    conversionOutputSection.style.display = 'block';
+
+    const statusElement = conversionOutputSection.querySelector('.conversion-status');
+    statusElement.textContent = `Ready to download as ${extension} (Converted successfully)`;
+}
+
+
+
+
 
 nextBtn.addEventListener('click', () => {
     resultsBox.style.display = 'block';
 
-    const reader = new FileReader();         // Creates t to read the file
-    reader.onload = (e) => {                 //  This is runs when the file is reading finish.
-        currentFileData = e.target.result;   // This variable  holds the Base64 string
+    const file = fileInput.files[0];
+    const reader = new FileReader(); 
+
+    reader.onload = (e) => {
+        currentFileData = e.target.result; 
+        currentFileName = file.name;
+        
         base64Output.value = currentFileData;
         previewMini.src = currentFileData;
         
-      
-        const file = fileInput.files[0];
-        document.getElementById('res-name').innerText = file.name;
+        document.getElementById('res-name').innerText = currentFileName;
         document.getElementById('res-meta').innerText = `${file.type.toUpperCase()} | ${(file.size / 1024).toFixed(1)} KB`;
     };
-    reader.readAsDataURL(fileInput.files[0]);
+    reader.readAsDataURL(file);
 });
+
+
+
 
 
 tabButtons.forEach(btn => {
@@ -46,28 +75,34 @@ tabButtons.forEach(btn => {
         
         btn.classList.add('active');
         document.getElementById(btn.dataset.tab).classList.add('active');
+        
+        if (btn.dataset.tab !== 'format-tab') {
+             conversionOutputSection.style.display = 'none';
+        }
     });
 });
 
 
-document.getElementById('download-btn').addEventListener('click', () => {
-    const format = document.querySelector('input[name="img-format"]:checked').value;
-    const canvas = document.createElement('canvas');
-    const img = new Image();
-    
-    img.onload = () => {
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-        
-        const link = document.createElement('a');
-        link.download = `converted-image.${format.split('/')[1]}`;
-        link.href = canvas.toDataURL(format);
-        link.click();
-    };
-    img.src = currentFileData;
+
+
+
+convertFormatBtn.addEventListener('click', () => {
+    if (currentFileData) {
+        simulateConversionSuccess();
+    } else {
+        alert("Please upload an image first.");
+    }
 });
+
+
+
+
+
+downloadBtn.addEventListener('click', () => {
+    const selectedFormat = formatSelect.value.split('/')[1].toUpperCase();
+});
+
+
 
 
 document.getElementById('decode-input').addEventListener('input', (e) => {
@@ -75,19 +110,26 @@ document.getElementById('decode-input').addEventListener('input', (e) => {
     decodeImg.src = e.target.value;
 });
 
-//  Copy Button //
+
+
+
 document.getElementById('copy-base64').addEventListener('click', () => {
     base64Output.select();
     document.execCommand('copy');
     alert('Base64 code copied to clipboard!');
 });
 
-// Back Button //
+
+
+
 document.getElementById('back-to-upload').addEventListener('click', () => {
     resultsBox.style.display = 'none';
     uploadContainer.style.display = 'block';
     resetToHome(); 
 });
+
+
+
 
 fileInput.addEventListener('change', function(e) {
     const file = e.target.files[0];
@@ -97,42 +139,43 @@ fileInput.addEventListener('change', function(e) {
 });
 
 function startUpload(file) {
-    // Show Loading //
     idleState.style.display = 'none';
     loadingState.style.display = 'block';
     document.getElementById('file-type-tags').style.display = 'none';
-    
-    // Show buttons //
     controls.style.display = 'flex';
 
     setTimeout(() => {
-        loadingState.style.display = 'none';
-        fileList.style.display = 'block';
-        
-        fileNameText.innerText = file.name;
-        fileSizeText.innerText = (file.size / 1024).toFixed(1) + " KB";
-        
-        // Activate "Next" button
-        nextBtn.disabled = false;
-        nextBtn.classList.add('active');
-    }, 2000);
+             loadingState.style.display = 'none';
+              fileList.style.display = 'block';
+                
+                 fileNameText.innerText = file.name;
+               fileSizeText.innerText = (file.size / 1024).toFixed(1) + " KB";
+                
+                nextBtn.disabled = false;
+                nextBtn.classList.add('active');
+            }, 2000);
 }
 
-// Function reset everything //
 function resetToHome() {
     fileInput.value = ""; 
     fileList.style.display = 'none';
     loadingState.style.display = 'none';
-    idleState.style.display = 'block';
+      idleState.style.display = 'block';
     document.getElementById('file-type-tags').style.display = 'flex';
     
-    // Hide  buttons  //
     controls.style.display = 'none';
     
     nextBtn.disabled = true;
     nextBtn.classList.remove('active');
+    
+    conversionOutputSection.style.display = 'none';
+        resultsBox.style.display = 'none';
+       currentFileData = null;
+       currentFileName = null;
+
+    convertedImagePreview.src = "";
+    convertedImagePreview.style.display = 'none';
 }
 
-//  Trash and Cancel  reset  // 
 removeFile.addEventListener('click', resetToHome);
 cancelBtn.addEventListener('click', resetToHome);
