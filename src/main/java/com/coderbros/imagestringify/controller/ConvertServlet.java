@@ -18,46 +18,74 @@ import com.coderbros.imagestringify.service.ConvertService;
 @MultipartConfig
 @WebServlet("/api/v1/convert")
 public class ConvertServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("action");
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+
         response.setContentType("application/json");
-        if (action.equals("imgToOther")) {
-            handleImageToOther(request, response);
-        } else if (action.equals("base64ToImg")) {
-            handleBytesToImage(request, response);
-        } else {
-        	HttpResponse.error(response, "Unknown action.");
+
+        String action = request.getParameter("action");
+        if (action == null || action.isEmpty()) {
+            HttpResponse.error(response, "Missing 'action' parameter.");
+            return;
         }
-	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		HttpResponse.error(response, "Unknown action.");
-	}
+        switch (action) {
+            case "imgToOther":
+                handleImageToOther(request, response);
+                break;
+            case "base64ToImg":
+                handleBytesToImage(request, response);
+                break;
+            default:
+                HttpResponse.error(response, "Unknown action.");
+        }
+    }
 
-	private void handleBytesToImage(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String base64 = request.getParameter("base64");
-		String outputFormat = request.getParameter("outputFormat");
-		
-		try {
-			HttpResponse.success(response, "Successfully Converted.", new ConvertService().convert(base64,outputFormat));
-		} catch (Exception e) {
-			HttpResponse.error(response, e.getMessage());
-		}
-	}
+    private void handleBytesToImage(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
 
+        String base64 = request.getParameter("base64");
+        String outputFormat = request.getParameter("outputFormat");
 
-	private void handleImageToOther(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		
-		String outputFormat = request.getParameter("outputFormat");
-		Part filePart = request.getPart("img");
-		
-		try {
-			HttpResponse.success(response, "Successfully Converted.", new ConvertService().convert(filePart,outputFormat));
-		} catch (Exception e) {
-			HttpResponse.error(response, e.getMessage());
-		}
-	}
+        if (base64 == null || base64.isEmpty()) {
+            HttpResponse.error(response, "Base64 data is required.");
+            return;
+        }
+
+        try {
+            HttpResponse.success(
+                response,
+                "Successfully Converted.",
+                new ConvertService().convert(base64, outputFormat)
+            );
+        } catch (Exception e) {
+            HttpResponse.error(response, e.getMessage());
+        }
+    }
+
+    private void handleImageToOther(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+
+        String outputFormat = request.getParameter("outputFormat");
+        Part filePart = request.getPart("img");
+
+        if (filePart == null || filePart.getSize() == 0) {
+            HttpResponse.error(response, "Image file is required.");
+            return;
+        }
+
+        try {
+            HttpResponse.success(
+                response,
+                "Successfully Converted.",
+                new ConvertService().convert(filePart, outputFormat)
+            );
+        } catch (Exception e) {
+            HttpResponse.error(response, e.getMessage());
+        }
+    }
 }
+
+

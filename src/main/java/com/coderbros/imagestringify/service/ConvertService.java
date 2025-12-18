@@ -23,30 +23,45 @@ public class ConvertService {
 	private static final Set<String> VALID_IMAGE_FORMATS = Set.of("png", "jpg", "jpeg", "gif", "bmp", "webp");
 
 	public String convert(Part part, String outputFormat) throws Exception {
-		if (outputFormat == null) {
-			throw new ParameterMissingException("Parameter \\\"outputFormat\\\" not found. Need to fill parameter.");
-		}
-		if (part == null) {
-			throw new FileNotFoundException("File Not Found. Please Upload Image.!!");
-		}
-		String mimeType = part.getContentType();
-		if (mimeType == null || !mimeType.startsWith("image/")) {
-			throw new InvalidImageTypeException("Invalid image type");
-		}
-		if (part.getSize() > twoMbInBytes) {
-			throw new LargeFileSizeException("File is larger than 2 MB");
-		}
-		if (!VALID_IMAGE_FORMATS.contains(outputFormat.toLowerCase())) {
-			throw new InvalidImageTypeException("Invalid output image format: " + outputFormat);
-		}
-		InputStream is = part.getInputStream();
-		byte[] imgBytes = is.readAllBytes();
-		is.close();
-		if (!(mimeType.substring(mimeType.indexOf("/") + 1)).equalsIgnoreCase(outputFormat)) {
-			imgBytes = convertImgFormat(is, outputFormat);
-		}
-		return convertBase64(imgBytes, mimeType);
+	    if (outputFormat == null) {
+	        throw new ParameterMissingException("Parameter \"outputFormat\" not found.");
+	    }
+	    if (part == null) {
+	        throw new FileNotFoundException("File Not Found. Please Upload Image.");
+	    }
+
+	    String mimeType = part.getContentType();
+	    if (mimeType == null || !mimeType.startsWith("image/")) {
+	        throw new InvalidImageTypeException("Invalid image type");
+	    }
+
+	    if (part.getSize() > twoMbInBytes) {
+	        throw new LargeFileSizeException("File is larger than 2 MB");
+	    }
+
+	    if (!VALID_IMAGE_FORMATS.contains(outputFormat.toLowerCase())) {
+	        throw new InvalidImageTypeException("Invalid output image format: " + outputFormat);
+	    }
+
+	    // ✅ FIX: close upload stream
+	    byte[] imgBytes;
+	    try (InputStream is = part.getInputStream()) {
+	        imgBytes = is.readAllBytes();
+	    }
+
+	    String inputFormat = mimeType.substring(mimeType.indexOf("/") + 1);
+
+	    if (!inputFormat.equalsIgnoreCase(outputFormat)) {
+	        imgBytes = convertImgFormat(
+	            new ByteArrayInputStream(imgBytes),
+	            outputFormat
+	        );
+	        mimeType = "image/" + outputFormat.toLowerCase();
+	    }
+
+	    return convertBase64(imgBytes, mimeType);
 	}
+
 
 	public String convert(String base64, String outputFormat) throws Exception {
 		if (outputFormat == null) {
@@ -59,14 +74,13 @@ public class ConvertService {
 			throw new InvalidImageTypeException("Invalid output image format: " + outputFormat);
 		}
 
-		String mimeType = base64.substring(5, base64.indexOf(";"));
+		String mimeType = base64.substring(5, base64.indexOf(";")+1);
 		String inputFormat = mimeType.substring(mimeType.indexOf("/") + 1);
 
 		if (!inputFormat.equalsIgnoreCase(outputFormat)) {
 			byte[] imageBytes = Base64.getDecoder().decode(base64.substring(base64.indexOf(",") + 1));
 			InputStream inputStream = new ByteArrayInputStream(imageBytes);
 			imageBytes = convertImgFormat(inputStream, outputFormat);
-			System.out.println("Image bytes : "+imageBytes);
 			String newMimeType = "image/" + outputFormat.toLowerCase();
 			return convertBase64(imageBytes, newMimeType);
 		}
@@ -78,14 +92,7 @@ public class ConvertService {
 		return ("data:" + mimeType + ";base64," + base64String);
 	}
 
-//	private byte[] convertImgFormat(InputStream is, String outputFormat) throws IOException {
-//		BufferedImage image = ImageIO.read(is);
-//		System.out.println("After buffer read"+image);
-//		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//		ImageIO.write(image, outputFormat, baos);
-//		System.out.println("baos"+baos);
-//		return baos.toByteArray();
-//	}
+
 	private byte[] convertImgFormat(InputStream is, String outputFormat) throws IOException {
 	    BufferedImage image = ImageIO.read(is);
 	    if (image == null) {

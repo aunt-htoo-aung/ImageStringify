@@ -36,3 +36,5 @@ buildNumber.properties
 .idea/
 
 build/
+
+.DS_STORE
